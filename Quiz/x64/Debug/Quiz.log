@@ -1,15 +1,17 @@
 ﻿  Source.cpp
+C:\Users\hasan\source\repos\Quiz\Quiz\Accounts.h(274,48): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
 C:\Users\hasan\source\repos\Quiz\Quiz\Questions.h(57): warning C4267: 'return': conversion from 'size_t' to 'const int', possible loss of data
-C:\Users\hasan\source\repos\Quiz\Quiz\Quiz.h(132,18): warning C4244: 'initializing': conversion from '_Rep' to 'unsigned int', possible loss of data
+C:\Users\hasan\source\repos\Quiz\Quiz\Quiz.h(127,18): warning C4244: 'initializing': conversion from '_Rep' to 'unsigned int', possible loss of data
           with
           [
               _Rep=std::chrono::system_clock::rep
           ]
-C:\Users\hasan\source\repos\Quiz\Quiz\Quiz.h(177,1): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\hasan\source\repos\Quiz\Quiz\Quiz.h(212,1): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\hasan\source\repos\Quiz\Quiz\Functions.h(51,36): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\hasan\source\repos\Quiz\Quiz\Functions.h(135,47): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\hasan\source\repos\Quiz\Quiz\Functions.h(143,40): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\hasan\source\repos\Quiz\Quiz\Functions.h(160,47): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\hasan\source\repos\Quiz\Quiz\Quiz.h(172,1): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\hasan\source\repos\Quiz\Quiz\Quiz.h(211,1): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\hasan\source\repos\Quiz\Quiz\Functions.h(41,38): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\hasan\source\repos\Quiz\Quiz\Functions.h(52,46): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\hasan\source\repos\Quiz\Quiz\Functions.h(68,36): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\hasan\source\repos\Quiz\Quiz\Functions.h(189,47): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\hasan\source\repos\Quiz\Quiz\Source.cpp(71,47): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
 C:\Users\hasan\source\repos\Quiz\Quiz\Answers.h(59): warning C4715: 'Answers::getTrueAnswer': not all control paths return a value
   Quiz.vcxproj -> C:\Users\hasan\source\repos\Quiz\x64\Debug\Quiz.exe

@@ -1,10 +1,4 @@
-#pragma once
-
-
-// Prototype
-
-void gotoXy(int x, int y); 
-void color(int set);
+#pragma once 
 
 class Quiz {
 	string _quizname;
@@ -72,6 +66,7 @@ public:
 
 		if (!file) throw exception("File couldnt be opened\n");
 		if (!file.is_open()) throw exception("File couldnt be opened\n");
+
 		for (auto& i : _questions.getQuestions()) {
 			file << i.first->getQuestion() << endl;
 			file << typecast_int(i.first->getPoint()) << endl;
@@ -185,6 +180,7 @@ public:
 						count -= 1;
 						j--;
 						back = true;
+						break;
 					}else if (choose == v.size() + 1 && count < v.size()) next = true;
 					else if (choose == v.size() + 2) save = true;
 					else if (choose >= 0 && choose < v.size()) {
@@ -198,14 +194,17 @@ public:
 		}
 		// Check Answers
 
-		int index = 0;
+		int index = 0, point = 0;
 		for (auto& i : _questions.getQuestions()) {
 			auto& v = (i.second)->getAnswers();
 			auto& trueanswers = i.second;
 			string answer = trueanswers->getTrueAnswer();
 
 			if (answers[index] < v.size()) {
-				if (v[answers[index]].getAnswer() == answer) True++;
+				if (v[answers[index]].getAnswer() == answer) {
+					True++;
+					point += i.first->getPoint();
+				}
 			}else Empty++;
 
 			index++;
@@ -216,7 +215,16 @@ public:
 		system("cls");
 		cout << "True : " << True << endl;
 		cout << "False : " << False << endl;
-		cout << "Empty : " << Empty << endl;
+		cout << "Empty : " << Empty << endl << endl;
+		cout << "Exam Score : " << 100 << '/' << float(float(float(point) / _questions.totalPoint())) * 100.0f << endl;
+		string folder = location + "\\" + "statistic.txt";
+		ofstream file(folder, ios::app);
+
+		if (!file) throw exception("File couldnt be opened\n");
+		if (!file.is_open()) throw exception("File couldnt be opened\n");
+
+		file << currentUser->getUsername() << _quizname << ' ' << True << ' ' << False << ' ' << Empty << ' ' << _questions.totalPoint() << ' ' << point << endl;
+
 		system("pause");
 	}
 

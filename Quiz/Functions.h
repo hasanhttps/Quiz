@@ -24,8 +24,6 @@ void getCurrentSizeT() {
 	}else change = false;
 }
 
-int x, y;
-
 void quizMenu(int len, vector<string> names, int* set) {
 	system("cls");
 	x = columns / 2 - 5;
@@ -35,6 +33,25 @@ void quizMenu(int len, vector<string> names, int* set) {
 		color(set[i]);
 		cout << names[i];
 	}color(defC);
+}
+
+int asciiCheck(int ascii, vector<string> selections, int choose) {
+	if (ascii == 72 || ascii == 119 || ascii == 89) {
+		if (choose) choose--;
+		else choose = selections.size() - 1;
+	}else if (ascii == 80 || ascii == 115 || ascii == 83) {
+		if (choose < selections.size() - 1) choose++;
+		else choose = 0;
+	}else return choose;
+	return choose;
+}
+
+void responsible(int* set, vector<string> selections, int choose, bool ch) {
+	getCurrentSizeT(); // Get Current Size of Terminal wit row and column
+	if (ch) {
+		quizMenu(selections.size(), selections, set);
+		gotoXy(x, y + choose);
+	}
 }
 
 string newQuiz() {
@@ -53,22 +70,16 @@ string newQuiz() {
 	for (int i = 1; i < len; i++) set[i] = defC;
 	quizMenu(len, names, set);
 	file.close();
+	responsible(set, names, choose, true);
 
 	while (true) {
-		getCurrentSizeT();// Get Current Size of Terminal wit row and column
-		if (change) {
-			quizMenu(len, names, set);
-			gotoXy(x, y + choose);
-		}if (_kbhit()) {
+		responsible(set, names, choose);
+		if (_kbhit()) {
 			int ascii = _getch();
 			for (int i = 0; i < len; i++) set[i] = defC;
-			if (ascii == 72 || ascii == 119 || ascii == 89) {
-				if (choose) choose--;
-				else choose = len - 1;
-			}else if (ascii == 80 || ascii == 115 || ascii == 83) {
-				if (choose < len - 1) choose++;
-				else choose = 0;
-			}else if (ascii == '\r') return names[choose];
+			choose = asciiCheck(ascii, names, choose);
+
+			if (ascii == '\r') return names[choose];
 			set[choose] = col;
 			quizMenu(len, names, set);
 			gotoXy(x, y + choose);
@@ -123,28 +134,22 @@ void menu() {
 	if (!user) selections.push_back("Create Quiz");
 	selections.push_back("New Quiz");
 	selections.push_back("Leader Top (10)");
-	if (user )selections.push_back("Help");
+	if (user)selections.push_back("Help");
 	selections.push_back("Exit");
 	int choose = 0;
 	int* set = new int[selections.size()];
 	for (int i = 0; i < selections.size(); i++) set[i] = defC; set[0] = col;
+	responsible(set, selections, choose, true);
 
 	while (true) {
-		getCurrentSizeT();// Get Current Size of Terminal wit row and column
-		if (change) {
-			quizMenu(selections.size(), selections, set);
-			gotoXy(x, y + choose);
-		}if (_kbhit()) {
-			int ascii = _getch();
+		responsible(set, selections, choose);
+		if (_kbhit()) {
 			set[choose] = defC;
+			int ascii = _getch();
+			choose = asciiCheck(ascii, selections, choose);
+			set[choose] = col;
 
-			if (ascii == 72 || ascii == 119 || ascii == 89) {
-				if (choose) choose--;
-				else choose = selections.size() - 1;
-			}else if (ascii == 80 || ascii == 115 || ascii == 83) {
-				if (choose < selections.size() - 1) choose++;
-				else choose = 0;
-			} if (ascii == '\r') {
+			if (ascii == '\r') {
 				if (choose == 0) {
 					system("cls");
 					currentQuiz = new Quiz;
@@ -152,11 +157,35 @@ void menu() {
 						currentQuiz->setQuizName(newQuiz());
 						currentQuiz->setFromFile();
 						currentQuiz->start();
-					}
+					}else currentQuiz->save();
 				}else if (choose == 1) {
+					if (user) {
+						try {
+							system("cls");
+							string folder = location + "\\" + "statistic.txt", username, quizname;
+							int True, False, emp, total, point;
+							ifstream file(folder, ios::out);
 
+							if (!file) throw exception("File couldnt be opened\n");
+							if (!file.is_open()) throw exception("File couldnt be opened\n");
+							cout << left << setw(20) << "| Name | " << setw(15) << "| Quiz Name |" << setw(10) << "| True |" << setw(10) << "| False |" << setw(10) << "| Empty |" << setw(10) << "| Total |" << setw(10) << "| Point |" << endl;
+
+							while (!file.eof()) {
+								file >> username;
+								file >> quizname;
+								file >> True;
+								file >> False;
+								file >> emp;
+								file >> total;
+								file >> point;
+
+								cout << left << setw(20) << username << " :" << setw(15) << quizname << setw(10) << True  << setw(10) << False << setw(10) << emp << setw(10) << total << setw(10) << point << endl;
+							}system("pause");
+						}catch (exception& ex) { cout << ex.what(); }
+
+					}
 				}else if (choose == 3) break;
-			}set[choose] = col;
+			}
 			quizMenu(selections.size(), selections, set);
 			gotoXy(x, y + choose);
 		}
