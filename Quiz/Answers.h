@@ -52,6 +52,11 @@ public:
 	// Getters
 
 	inline vector<Answer>& getAnswers() { return answers; }
+	string getTrueAnswer() {
+		for (auto& i : answers) {
+			if (i.ifTrue()) return i.getAnswer();
+		}
+	}
 
 	// Operator Overloading
 

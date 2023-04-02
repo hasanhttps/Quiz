@@ -118,19 +118,30 @@ public:
 
 		system("cls");
 		int* answers = new int[_questions.size()];
+		for (int i = 0; i < _questions.size(); i++) answers[i] = -1;
 		bool back = false, next = false, save = false;
 		auto& m = _questions.getQuestions();
 		auto it = m.cbegin();
-		int random = rand() % m.size(), count = 0, True = 0, False = 0;
+		int random = rand() % m.size(), count = 0, True = 0, False = 0, Empty = 0;
 		advance(it, random);
+
+		// Randomize Answers
+
+		for (auto& i : _questions.getQuestions()) {
+			auto& v = (i.second)->getAnswers();
+			unsigned seed = chrono::system_clock::now()
+				.time_since_epoch()
+				.count();
+			shuffle(begin(v), end(v), default_random_engine(seed));
+		}
+
+		// Questions
 
 		for (auto j = _questions.getQuestions().begin(); j != _questions.getQuestions().end(); count++) {
 			if (back && count > 0) {
 				j--;
 				count--;
-			}
-
-			auto& i = *j;
+			}auto& i = *j;
 			system("cls");
 			cout << _quizname << endl;
 			cout << count + 1 << "." << *i.first << endl;
@@ -138,34 +149,35 @@ public:
 			auto& v = (i.second)->getAnswers();
 			int* set = new int[v.size() + 2] {defC};
 			int choose = 0;
-			unsigned seed = chrono::system_clock::now()
-				.time_since_epoch()
-				.count();
-			shuffle(begin(v), end(v), default_random_engine(seed));
 
 			while (true) {
-				for (int j = 0; j < v.size() + 2; j++) set[j] = defC;
+				for (int j = 0; j < v.size() + 3; j++) set[j] = defC;
 				set[choose] = col;
 				for (int j = 0; j < v.size(); j++) {
 					gotoXy(0, 4 + j);
 					color(set[j]);
 					cout << char(97 + j) << ") " << v[j];
-				}gotoXy(0, 8);
+				}gotoXy(0, 9);
 				color(set[4]);
 				cout << "Previous";
-				gotoXy(0, 9);
+				gotoXy(0, 10);
 				color(set[5]);
 				cout << "Next";
+				gotoXy(0, 11);
+				color(set[6]);
+				cout << "Save";
 				color(defC);
-				gotoXy(0, 4 + choose);
+				if (choose > v.size() - 1) gotoXy(0, 5 + choose);
+				else gotoXy(0, 4 + choose);
+				
 				int ascii = _getch();
-				for (int j = 0; j < v.size() + 2; j++) set[j] = defC;
+				for (int j = 0; j < v.size() + 3; j++) set[j] = defC;
 				if (ascii == 72 || ascii == 119 || ascii == 89) {
 					if (choose) choose--;
-					else choose = v.size() + 1;
+					else choose = v.size() + 2;
 				}
 				else if (ascii == 80 || ascii == 115 || ascii == 83) {
-					if (choose < v.size() + 1) choose++;
+					if (choose < v.size() + 2) choose++;
 					else choose = 0;
 				}else if (ascii == '\r') {
 					back = false;
@@ -173,27 +185,38 @@ public:
 						count -= 1;
 						j--;
 						back = true;
-					}else if (choose == v.size() && count == 0) { next = false; back = false; }
-					else if (choose == v.size() + 1 && count < v.size() + 2) { next = true; }
+					}else if (choose == v.size() + 1 && count < v.size()) next = true;
+					else if (choose == v.size() + 2) save = true;
 					else if (choose >= 0 && choose < v.size()) {
 						answers[count] = choose;
-						string answer;
-						answer = v[choose].getAnswer();
-						for (int i = 0; i < v.size(); i++) {
-							if (v[i].ifTrue() && v[i].getAnswer() == answer) {
-								True++;
-								break;
-							}
-						}False = (count + 1) - True;
 						next = true;
-					}break;
+					}if (!(count == 0 && choose == v.size()) && !(count == _questions.getQuestions().size() - 1 && choose == v.size() + 1)) break;
 				}
 			}
+			if (save) break;
 			if (next) j++;
 		}
+		// Check Answers
+
+		int index = 0;
+		for (auto& i : _questions.getQuestions()) {
+			auto& v = (i.second)->getAnswers();
+			auto& trueanswers = i.second;
+			string answer = trueanswers->getTrueAnswer();
+
+			if (answers[index] < v.size()) {
+				if (v[answers[index]].getAnswer() == answer) True++;
+			}else Empty++;
+
+			index++;
+		}False = (_questions.getQuestions().size()) - (True + Empty);
+
+		// Print Result
+
 		system("cls");
 		cout << "True : " << True << endl;
 		cout << "False : " << False << endl;
+		cout << "Empty : " << Empty << endl;
 		system("pause");
 	}
 

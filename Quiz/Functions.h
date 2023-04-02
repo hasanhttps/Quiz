@@ -11,28 +11,6 @@ void gotoXy(int x, int y) {
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), c);
 }
 
-void menu(int* set, int x, int y) {
-	system("cls");
-	gotoXy(x, y);
-	color(set[0]);
-	if (set[0] == col) cout << "  ";
-	cout << "Create Quiz";
-	gotoXy(x, y + 1);
-	color(set[1]);
-	if (set[1] == col) cout << "  ";
-	cout << "Start Quiz";
-	gotoXy(x, y + 2);
-	color(set[2]);
-	if (set[2] == col) cout << "  ";
-	cout << "Leader Board(Top 10)";
-	gotoXy(x, y + 3);
-	color(set[3]);
-	if (set[3] == col) cout << "  ";
-	cout << "Exit";
-
-	color(defC);
-}
-
 void getCurrentSizeT() {
 	CONSOLE_SCREEN_BUFFER_INFO csbi;
 
@@ -50,8 +28,9 @@ int x, y;
 
 void quizMenu(int len, vector<string> names, int* set) {
 	system("cls");
+	x = columns / 2 - 5;
 	for (int i = 0; i < len; i++) {
-		x = columns / 2 - names[i].size(), y = rows / 2 - len + 1;
+		y = rows / 2 - len + 1;
 		gotoXy(x, y + i);
 		color(set[i]);
 		cout << names[i];
@@ -137,4 +116,49 @@ Quiz* createQuiz() {
 	quiz->setQuestions(questions);
 	
 	return quiz;
+}
+
+void menu() {
+	vector<string> selections;
+	if (!user) selections.push_back("Create Quiz");
+	selections.push_back("New Quiz");
+	selections.push_back("Leader Top (10)");
+	if (user )selections.push_back("Help");
+	selections.push_back("Exit");
+	int choose = 0;
+	int* set = new int[selections.size()];
+	for (int i = 0; i < selections.size(); i++) set[i] = defC; set[0] = col;
+
+	while (true) {
+		getCurrentSizeT();// Get Current Size of Terminal wit row and column
+		if (change) {
+			quizMenu(selections.size(), selections, set);
+			gotoXy(x, y + choose);
+		}if (_kbhit()) {
+			int ascii = _getch();
+			set[choose] = defC;
+
+			if (ascii == 72 || ascii == 119 || ascii == 89) {
+				if (choose) choose--;
+				else choose = selections.size() - 1;
+			}else if (ascii == 80 || ascii == 115 || ascii == 83) {
+				if (choose < selections.size() - 1) choose++;
+				else choose = 0;
+			} if (ascii == '\r') {
+				if (choose == 0) {
+					system("cls");
+					currentQuiz = new Quiz;
+					if (user) {
+						currentQuiz->setQuizName(newQuiz());
+						currentQuiz->setFromFile();
+						currentQuiz->start();
+					}
+				}else if (choose == 1) {
+
+				}else if (choose == 3) break;
+			}set[choose] = col;
+			quizMenu(selections.size(), selections, set);
+			gotoXy(x, y + choose);
+		}
+	}
 }
