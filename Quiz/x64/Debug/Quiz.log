@@ -11,7 +11,7 @@ C:\Users\hasan\source\repos\Quiz\Quiz\Quiz.h(211,1): warning C4267: '=': convers
 C:\Users\hasan\source\repos\Quiz\Quiz\Functions.h(41,38): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
 C:\Users\hasan\source\repos\Quiz\Quiz\Functions.h(52,46): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
 C:\Users\hasan\source\repos\Quiz\Quiz\Functions.h(68,36): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\hasan\source\repos\Quiz\Quiz\Functions.h(189,47): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\hasan\source\repos\Quiz\Quiz\Source.cpp(71,47): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\hasan\source\repos\Quiz\Quiz\Functions.h(227,47): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\hasan\source\repos\Quiz\Quiz\Source.cpp(72,47): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
 C:\Users\hasan\source\repos\Quiz\Quiz\Answers.h(59): warning C4715: 'Answers::getTrueAnswer': not all control paths return a value
   Quiz.vcxproj -> C:\Users\hasan\source\repos\Quiz\x64\Debug\Quiz.exe

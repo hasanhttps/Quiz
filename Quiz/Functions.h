@@ -165,10 +165,11 @@ void menu() {
 							string folder = location + "\\" + "statistic.txt", username, quizname;
 							int True, False, emp, total, point;
 							ifstream file(folder, ios::out);
+							map<string, vector<int>> statistics;
 
 							if (!file) throw exception("File couldnt be opened\n");
 							if (!file.is_open()) throw exception("File couldnt be opened\n");
-							cout << left << setw(20) << "| Name | " << setw(15) << "| Quiz Name |" << setw(10) << "| True |" << setw(10) << "| False |" << setw(10) << "| Empty |" << setw(10) << "| Total |" << setw(10) << "| Point |" << endl;
+							cout << left << setw(28) << "| Name | " << setw(15) << "| Quiz Name |" << setw(10) << "| True |" << setw(10) << "| False |" << setw(10) << "| Empty |" << setw(10) << "| Total |" << setw(10) << "| Point |" << setw(10) << "| Percent |" <<  endl;
 
 							while (!file.eof()) {
 								file >> username;
@@ -179,8 +180,45 @@ void menu() {
 								file >> total;
 								file >> point;
 
-								cout << left << setw(20) << username << " :" << setw(15) << quizname << setw(10) << True  << setw(10) << False << setw(10) << emp << setw(10) << total << setw(10) << point << endl;
-							}system("pause");
+								vector<int> results;
+								results.push_back(True);
+								results.push_back(False);
+								results.push_back(emp);
+								results.push_back(total);
+								results.push_back(point);
+								statistics[username + '-' + quizname] = results;
+								
+							}
+
+							list <vector<int>> numbers;
+							for (auto& i : statistics) {
+								numbers.push_back(i.second);
+							}
+
+							numbers.sort([](vector<int> v1, vector<int> v2)->auto {
+								float percent1 = (float(v1[4]) / float(v1[3])) * 100.0f;
+								float percent2 = (float(v2[4]) / float(v2[3])) * 100.0f;
+								return (percent1 > percent2);
+							});
+
+							auto j = numbers.begin();
+							for (auto& i : statistics){
+								username = i.first.substr(0, i.first.find('-'));
+								quizname = i.first.substr(i.first.find('-') + 1, i.first.size() - 1);
+								True = (*j)[0];
+								False = (*j)[1];
+								emp = (*j)[2];
+								total = (*j)[3];
+								point = (*j)[4];
+
+								j++;
+								cout << left << setw(20) << username << " :\t\t" << setw(15) << quizname << setw(10) << True
+									 << setw(10) << False << setw(10) << emp << setw(10) << total << setw(10) << point 
+									 << setw(10) << (float(point) / float(total)) * 100.0f << endl;
+							}
+							system("pause");
+
+							file.close();
 						}catch (exception& ex) { cout << ex.what(); }
 
 					}
