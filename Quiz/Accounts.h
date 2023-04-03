@@ -120,7 +120,7 @@ public:
 
 class Admin;
 
-vector<Admin> admins;
+vector<Admin*> admins;
 
 class Admin : protected Person{
 	string _adminname;
@@ -173,12 +173,12 @@ public:
 			string name, surname, username, password, s;
 
 			while (!file.eof()) {
-				getline(cin, username, '-');
-				getline(cin, password, '-');
-				getline(cin, name, '-');
-				getline(cin, surname, '-');
-				file >> s;
-				Admin newadmin(name, surname, username, password);
+				getline(file, username, '-');
+				getline(file, password, '-');
+				getline(file, name, '-');
+				getline(file, surname, '-');
+				getline(file, s, '\n');
+				Admin* newadmin = new Admin(name, surname, username, password);
 				admins.push_back(newadmin);
 			}
 		}
@@ -244,6 +244,7 @@ void signup(bool isIn = false) {
 						currentUser->writeFile();
 						user = true;
 					}else {
+						user = true;
 						currentUser = new User();
 						currentUser->setPassword(password);
 						currentUser->setUsername(username);
@@ -251,6 +252,7 @@ void signup(bool isIn = false) {
 						for (auto& i : users) {
 							if (*i == *currentUser) isLogined = true;
 						}if (isLogined) menu();
+						isLogined = false;
 					}
 				}else if (choose == 1) {
 					if (!isIn) {
@@ -259,16 +261,20 @@ void signup(bool isIn = false) {
 						user = false;
 					}
 					else {
+						user = false;
+						system("pause");
 						currentAdmin = new Admin();
 						currentAdmin->setPassword(password);
 						currentAdmin->setAdminName(username);
+						system("pause");
 						currentAdmin->readFile();
-						for_each(admins.begin(), admins.end(), [](Admin& u)->void {
-							if (u == *currentAdmin) {
-								isLogined = true;
-								return;
-							}
-						});if (isLogined) menu();
+						system("pause");
+						system("pause");
+						for (auto& i : admins) {
+							system("pause");
+							if (*i == *currentAdmin) isLogined = true;
+						}if (isLogined) menu();
+						isLogined = false;
 					}
 				}
 			}quizMenu(selections.size(), selections, set);
