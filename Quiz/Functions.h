@@ -157,7 +157,11 @@ void menu() {
 						currentQuiz->setQuizName(newQuiz());
 						currentQuiz->setFromFile();
 						currentQuiz->start();
-					}else currentQuiz->save();
+					}
+					else {
+						currentQuiz = createQuiz();;
+						currentQuiz->save();
+					}
 				}else if (choose == 1) {
 					if (user) {
 						try {

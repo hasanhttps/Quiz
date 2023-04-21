@@ -262,16 +262,11 @@ void signup(bool isIn = false) {
 					}
 					else {
 						user = false;
-						system("pause");
 						currentAdmin = new Admin();
 						currentAdmin->setPassword(password);
 						currentAdmin->setAdminName(username);
-						system("pause");
 						currentAdmin->readFile();
-						system("pause");
-						system("pause");
 						for (auto& i : admins) {
-							system("pause");
 							if (*i == *currentAdmin) isLogined = true;
 						}if (isLogined) menu();
 						isLogined = false;

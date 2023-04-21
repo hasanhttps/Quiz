@@ -59,21 +59,26 @@ public:
 	// Functions
 
 	void save() {
-		string folder = location + "\\" + "Quizs";
-		_mkdir(folder.c_str());
+		try {
+			string folder = location + "\\" + "Quizs";
+			_mkdir(folder.c_str());
 
-		ofstream file(folder + "\\" + _quizname, ios::out);
+			ofstream file(folder + "\\" + _quizname, ios::out);
 
-		if (!file) throw exception("File couldnt be opened\n");
-		if (!file.is_open()) throw exception("File couldnt be opened\n");
+			if (!file) throw exception("File couldnt be opened\n");
+			if (!file.is_open()) throw exception("File couldnt be opened\n");
 
-		for (auto& i : _questions.getQuestions()) {
-			file << i.first->getQuestion() << endl;
-			file << typecast_int(i.first->getPoint()) << endl;
-			file << (i.second->getAnswers()[0]).getAnswer() << endl;
-			for (int j = 1; j < 4; j++) file << (i.second->getAnswers()[j]).getAnswer() << "-";
-			file << endl;
-		}file.close();
+			for (auto& i : _questions.getQuestions()) {
+				file << i.first->getQuestion() << endl;
+				file << typecast_int(i.first->getPoint()) << endl;
+				file << (i.second->getAnswers()[0]).getAnswer() << endl;
+				for (int j = 1; j < 4; j++) file << (i.second->getAnswers()[j]).getAnswer() << "-";
+				file << endl;
+			}file.close();
+		}
+		catch (exception& ex) {
+			cout << ex.what() << endl;
+		}
 	}
 
 	void setFromFile() {
